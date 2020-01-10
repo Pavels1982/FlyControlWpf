@@ -1,0 +1,403 @@
+﻿<Window x:Class="FlyControlWPF.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FlyControlWPF.Views"
+        xmlns:custom="clr-namespace:FlyControlWPF.CustomControls"
+        xmlns:helix="http://helix-toolkit.org/wpf"
+        xmlns:converters="clr-namespace:FlyControlWPF.Services"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800"
+        >
+    <Window.Resources>
+        <converters:ColorToSolidBrushConverter x:Key="ColorToSolidBrushConverter"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.3*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.8*"/>
+
+        </Grid.RowDefinitions>
+       
+        <GroupBox 
+                Background="DimGray"
+                Margin="15"
+                Grid.Column="0"
+                Grid.Row="1"
+                Height="Auto"
+                Style="{StaticResource MaterialDesignCardGroupBox}">
+            <GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock
+                                Margin="8,0,0,0"
+                                VerticalAlignment="Center"
+                                Text="Aircrafts" />
+                    </StackPanel>
+                </DataTemplate>
+            </GroupBox.HeaderTemplate>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.8*"/>
+                    <RowDefinition Height="0.2*"/>
+                </Grid.RowDefinitions>
+
+                <DataGrid
+                        Grid.Row="0"
+                        HorizontalAlignment="Stretch"
+                        AutoGenerateColumns="False"
+                        CanUserAddRows="False"
+                        CanUserDeleteRows="False"
+                        CanUserReorderColumns="False"
+                        CanUserResizeColumns="True"
+                        CanUserSortColumns="True"
+                        ItemsSource="{Binding ListPlane, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedItem="{Binding SelectedPlane, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        SelectionMode="Single"
+                       >
+
+                    <DataGrid.Columns>
+
+                        <DataGridTemplateColumn
+                                Width="0.6*"
+                                CanUserResize="False"
+                                Header="Name">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox Text="{Binding Path=Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+
+
+
+                        <DataGridTemplateColumn
+                                Width="0.3*"
+                                CanUserResize="False"
+                                Header="">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Width="50" Command="{Binding DataContext.DeleteAircraftCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}">
+                                        <materialDesign:PackIcon Kind="Trash" />
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                    </DataGrid.Columns>
+
+
+
+
+                </DataGrid>
+
+                <StackPanel 
+                        Grid.Row="1"
+                        Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    >
+                    <Button 
+                            Margin="5"
+                            Command="{Binding AddAircraftCommand}" 
+                            VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" >
+                            <TextBlock Text="Add Aircraft"  VerticalAlignment="Center"/>
+                              </StackPanel>
+                    </Button>
+
+                
+
+                </StackPanel>
+
+
+            </Grid>
+
+
+
+        </GroupBox>
+
+
+
+
+
+
+        <Grid Grid.Row="1" Grid.Column="1" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.4*"/>
+                <ColumnDefinition Width="0.6*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.7*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+           
+
+            <GroupBox 
+                 Background="DimGray"
+                Margin="15"
+                Grid.Column="0"
+                Style="{StaticResource MaterialDesignCardGroupBox}">
+                <GroupBox.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Margin="8,0,0,0"
+                                VerticalAlignment="Center"
+                                Text="Map" />
+                        </StackPanel>
+                    </DataTemplate>
+                </GroupBox.HeaderTemplate>
+                
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                     
+                
+                    </Grid.RowDefinitions>
+
+                      <!--Компонент GmapControl-->
+                    <ScrollViewer  Grid.Row="0" VerticalScrollBarVisibility="Hidden">
+                        <custom:GmapControl/>
+                    </ScrollViewer>
+
+                    <!--<custom:GmapControl Grid.Row="0" />-->
+
+
+                    <Border 
+                       
+                        Margin="10"
+                        Background="White"
+                        Grid.Row="0"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Center"
+                        CornerRadius="5"
+                        BorderBrush="DimGray"
+                        BorderThickness="1"
+                        >
+                        <StackPanel 
+                            Orientation="Horizontal"
+                            Margin="5"
+                            >
+                            <TextBox 
+                                
+                            Width="100"
+                            Foreground="Black"
+                            Text="{Binding LocationName}"/>
+                            <Button 
+                            Margin="5 0 0 0 "
+                            Height="25"
+                            Content="Go"
+                            Command="{Binding SearchLocationCommand}"
+                            />
+                        </StackPanel>
+
+
+
+                    </Border>
+                    <Button 
+                        Grid.Row="0"
+                        Margin="15"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Right"
+                        Content="Get" 
+                        Command="{Binding SaveImage}">
+                      
+                    </Button>
+
+                </Grid>
+                
+            </GroupBox>
+
+
+
+            <GroupBox 
+                Background="DimGray"
+                Margin="15"
+                Grid.Column="1"
+                Style="{StaticResource MaterialDesignCardGroupBox}">
+                <GroupBox.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Margin="8,0,0,0"
+                                VerticalAlignment="Center"
+                                Text="3DViewer" />
+                        </StackPanel>
+                    </DataTemplate>
+                </GroupBox.HeaderTemplate>
+                <custom:ViewPortControl DataContext="{Binding ViewPort}"/>
+
+            </GroupBox>
+
+            <GridSplitter 
+                Margin="15 0 15 0"
+                Grid.Row="1" 
+                Grid.ColumnSpan="2" 
+                Height="5"
+                Background="DimGray"
+                HorizontalAlignment="Stretch" 
+                VerticalAlignment="Center" />
+
+            <GroupBox 
+                Background="DimGray"
+                Margin="15"
+                Grid.Column="1"
+                Grid.Row="2"
+                Height="Auto"
+                Style="{StaticResource MaterialDesignCardGroupBox}">
+                <GroupBox.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Margin="8,0,0,0"
+                                VerticalAlignment="Center"
+                                Text="Objects" />
+                        </StackPanel>
+                    </DataTemplate>
+                </GroupBox.HeaderTemplate>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.8*"/>
+                        <RowDefinition Height="0.2*"/>
+                    </Grid.RowDefinitions>
+
+                    <DataGrid
+                        Grid.Row="0"
+                        HorizontalAlignment="Stretch"
+                        AutoGenerateColumns="False"
+                        CanUserAddRows="False"
+                        CanUserDeleteRows="False"
+                        CanUserReorderColumns="False"
+                        CanUserResizeColumns="True"
+                        CanUserSortColumns="True"
+                        ItemsSource="{Binding ListBox3D, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedItem="{Binding SelectedBox3D, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        SelectionMode="Single"
+                       >
+
+                        <DataGrid.Columns>
+
+                            <DataGridTemplateColumn
+                                Width="0.1*"
+                                CanUserResize="False"
+                                Header="Color">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Rectangle Fill="{Binding Path=Color, Converter={StaticResource ColorToSolidBrushConverter}}" Width="32" Height="32"  />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn
+                                Width="0.6*"
+                                CanUserResize="False"
+                                Header="Name">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding Path=Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+
+
+
+                            <DataGridTemplateColumn
+                                Width="0.3*"
+                                CanUserResize="False"
+                                Header="">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Width="50" Command="{Binding DataContext.DeleteObjectCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}">
+                                            <materialDesign:PackIcon Kind="Trash" />
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                        </DataGrid.Columns>
+
+
+
+
+                    </DataGrid>
+
+                    <StackPanel 
+                        Grid.Row="1"
+                        Orientation="Horizontal">
+                        <Button 
+                            Margin="5"
+                            Command="{Binding AddBlueBoxCommand}" 
+                            VerticalAlignment="Center">
+                            <StackPanel Orientation="Horizontal" >
+                                <TextBlock Text="Add"  VerticalAlignment="Center"/>
+                                <Border 
+                                    Margin="5 0 0 0"
+                                     VerticalAlignment="Center"
+                                    Background="Blue"  
+                                    Width="30" 
+                                    Height="15"
+                                    BorderBrush="White"
+                                    BorderThickness="1"
+                                    />
+
+                            </StackPanel>
+                        </Button>
+
+                        <Button 
+                            Margin="5"
+                            Command="{Binding AddRedBoxCommand}" 
+                            VerticalAlignment="Center">
+                            <StackPanel Orientation="Horizontal" >
+                                <TextBlock Text="Add"  VerticalAlignment="Center"/>
+                                <Border 
+                                    Margin="5 0 0 0"
+                                    VerticalAlignment="Center"
+                                    Background="Red"  
+                                    Width="30" 
+                                    Height="15"
+                                    BorderBrush="White"
+                                    BorderThickness="1"
+                                    />
+
+                            </StackPanel>
+                        </Button>
+
+                    </StackPanel>
+
+
+                </Grid>
+
+
+
+            </GroupBox>
+            
+            
+            
+            
+            
+            
+
+
+            <!--<ScrollViewer  Grid.Column="1" HorizontalScrollBarVisibility="Auto" >
+                <StackPanel Orientation="Vertical">
+                    <Image Source="{Binding Image}" />
+                   
+                </StackPanel>
+            </ScrollViewer>-->
+
+        </Grid>
+
+
+
+
+    </Grid>
+</Window>
