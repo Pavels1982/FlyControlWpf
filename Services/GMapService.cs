@@ -66,7 +66,7 @@ namespace FlyControlWPF.Services
         private static void Gmap_Loaded(object sender, RoutedEventArgs e)
         {
             GMap.NET.GMaps.Instance.Mode = GMap.NET.AccessMode.ServerOnly;
-            GMap.NET.GMaps.Instance.UseMemoryCache = false;
+            GMap.NET.GMaps.Instance.BoostCacheEngine = false;
             instance.Gmap.MapProvider = GMap.NET.MapProviders.GoogleSatelliteMapProvider.Instance;
             instance.Gmap.MinZoom = 5;
             instance.Gmap.MaxZoom = 16;
